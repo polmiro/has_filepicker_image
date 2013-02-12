@@ -40,8 +40,20 @@ or
 
 
 Set your API Key in config/application.rb:
-
+```ruby
     config.has_filepicker_image.api_key = "Your filepicker.io API Key"
+```
+
+Set your custom default options for the image urls (you can override or add your own options):
+```ruby
+    config.has_filepicker_image.defaults = {
+      :'data-fp-store-location'  => 'S3',
+      :'data-fp-extensions'      => '.png,.jpg,.jpeg',
+      :'data-fp-option-services' => 'COMPUTER',
+      :'data-fp-button-text'     => 'Pick File',
+      :'onchange'                => "HasFilepickerImage.previewPickedFile(event);",
+    }
+```
 
 
 
