@@ -2,10 +2,8 @@ module HasFilepickerImage
   class Configuration
     attr_writer :api_key
     attr_writer :defaults
-    attr_accessor :replaceable
 
     def initialize(*args)
-      @replaceable = true
       @defaults = {
         :'data-fp-store-location'  => 'S3',
         :'data-fp-extensions'      => '.png,.jpg,.jpeg',

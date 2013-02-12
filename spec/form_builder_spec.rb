@@ -37,27 +37,11 @@ describe HasFilepickerImage::FormBuilderMixin do
       "<input data-fp-debug=\"true\" id=\"test_model_image_url\" name=\"test_model[image_url]\" size=\"30\" type=\"filepicker\" />"
     end
 
-    context "when model has url has value" do
-      before { model.image_url = 'http://filepicker.io/images/1' }
-
-      context "when not replaceable" do
-        before { ::Rails.application.config.has_filepicker_image.replaceable = false }
-
-        it "returns the filepicker input with value" do
-          filepicker_image_field.should ==
-          "<input id=\"test_model_image_url\" name=\"test_model[image_url]\" size=\"30\" type=\"filepicker\" value=\"#{model.image_url}\" />"
-        end
-      end
-
-      context "when replaceable" do
-        before { ::Rails.application.config.has_filepicker_image.replaceable = true }
-
-        it "returns the filepicker input with value" do
-          filepicker_image_field.should ==
-          "<input data-fp-button-text=\"Replace\" id=\"test_model_image_url\" name=\"test_model[image_url]\" size=\"30\" type=\"filepicker\" value=\"#{model.image_url}\" />" +
-          "<div class='filepicker-image'><img alt=\"image_url thumbnail\" src=\"http://filepicker.io/images/1/convert?w=260&amp;h=180\" /></div>".html_safe
-        end
-      end
+    it "returns the filepicker input with value and an the image tag when model has url has value" do
+      model.image_url = 'http://filepicker.io/images/1'
+      filepicker_image_field.should ==
+      "<input data-fp-button-text=\"Replace\" id=\"test_model_image_url\" name=\"test_model[image_url]\" size=\"30\" type=\"filepicker\" value=\"#{model.image_url}\" />" +
+      "<div class='filepicker-image'><img alt=\"image_url thumbnail\" src=\"http://filepicker.io/images/1/convert?w=260&amp;h=180\" /></div>".html_safe
     end
 
   end

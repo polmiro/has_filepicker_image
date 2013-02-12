@@ -7,7 +7,7 @@ module HasFilepickerImage
 
       extra_content = ''
 
-      if object.send(method).present? && config.replaceable
+      if object.send(method).present?
         options[:'data-fp-button-text'] = 'Replace'
         thumb_url = object.send(method) + "/convert?w=260&h=180"
         thumb_alt = "#{method} thumbnail"
