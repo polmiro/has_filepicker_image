@@ -1,0 +1,67 @@
+(function(a){if(window.filepicker){return}var b=a.createElement("script");b.type="text/javascript";b.async=!0;b.src=("https:"===a.location.protocol?"https:":"http:")+"//api.filepicker.io/v1/filepicker.js";var c=a.getElementsByTagName("script")[0];c.parentNode.insertBefore(b,c);var d={};d._queue=[];var e="pick,pickMultiple,pickAndStore,read,write,writeUrl,export,convert,store,storeUrl,remove,stat,setKey,constructWidget,makeDropPane".split(",");var f=function(a,b){return function(){b.push([a,arguments])}};for(var g=0;g<e.length;g++){d[e[g]]=f(e[g],d._queue)}window.filepicker=d})(document);
+
+filepicker.setKey('<%= ::Rails.application.config.has_filepicker_image.api_key %>');
+
+filepicker.previewPickedImage = function($elem, url) {
+  var $container, element;
+  $container = null;
+  // Container to put the image in
+  if ($elem.find('.filepicker-image').size() > 0) {
+    // Container exists from previous file picked
+    $container = $elem.find('.filepicker-image:first');
+  } else {
+    // Create new container
+    $container = $("<div class='filepicker-image'></div>");
+    $elem.prepend($container);
+  }
+  $container.html("<img src='" + url + '/convert?w=260&h=180' + '\'/>');
+  return true;
+};
+
+filepicker.addDeleteButton = function($button, $elem) {
+  if ($button.data('delete_button') !== false)
+    $elem.append("<a href='#' class='btn' data-action='removeImage'><i class='icon-trash'></i></a>");
+};
+
+filepicker.pickImage = function($button) {
+  var data = $button.data();
+  var $elem = $button.parent();
+  filepicker.pickAndStore(
+    data,
+    data,
+    function(fpfiles) {
+      var url = fpfiles[0].url;
+      $elem.find('input[type=hidden]').val(url);
+      filepicker.previewPickedImage($elem, url);
+      filepicker.addDeleteButton($button, $elem);
+      $button.remove();
+    }
+  );
+};
+
+$(document).on('nested:fieldAdded', function(event) {
+  var field = event.field;
+  var $element = field.find("[data-action=pickImage]");
+  if ($element.size() > 0) {
+    filepicker.pickImage( $element );
+  }
+});
+
+$(document).on('click', 'a[data-action=pickImage]', function(event) {
+  event.preventDefault();
+  filepicker.pickImage( $(this) );
+});
+
+$(document).on('click', 'a[data-action=removeImage]', function(event) {
+  event.preventDefault();
+
+  var $this = $(this);
+  var $parent = $this.parent();
+  var $button = $("<a href='#' data-action='pickImage' class='btn'>Pick</a>");
+
+  $button.data( $parent.find('input[type=hidden]').data() );
+  $parent.append( $button );
+  $parent.find('input[type=hidden]').val('');
+  $parent.find('.filepicker-image, [data-action=removeImage]').remove();
+});
+

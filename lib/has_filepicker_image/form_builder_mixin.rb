@@ -2,23 +2,31 @@ module HasFilepickerImage
   module FormBuilderMixin
     def filepicker_image_field(method, opts = {})
       config = ::Rails.application.config.has_filepicker_image
-      options = config.defaults.dup
-      options[:value] = object.send(method)
 
-      extra_content = ''
+      value = object.send(method)
+      options = config.defaults.merge(opts).merge(
+        class: 'btn',
+        value: value
+      )
 
-      if object.send(method).present?
-        options[:'data-fp-button-text'] = 'Replace'
-        thumb_url = object.send(method) + "/convert?w=260&h=180"
+      content = ''
+
+      if value.present?
+        thumb_url = value + "/convert?w=260&h=180"
         thumb_alt = "#{method} thumbnail"
-        extra_content = "<div class='filepicker-image'>#{@template.image_tag(thumb_url, alt: thumb_alt)}</div>".html_safe
+        preview = "<div class='filepicker-image'>#{@template.image_tag(thumb_url, alt: thumb_alt)}</div>"
+        preview += "<a href='#' class='btn' data-action='removeImage'><i class='icon-trash'></i></a>" unless options[:'data-delete_button'] == false
+        content = preview.html_safe
+      else
+        content = @template.content_tag(:a, 'Pick', options.merge(:href => '#', :'data-action' => 'pickImage'))
       end
 
-      options.merge!(opts)
-
-      instance_tag = ActionView::Helpers::InstanceTag.new(@object_name, method, @template, object)
-      input_field_tag = instance_tag.to_input_field_tag('filepicker', options)
-      input_field_tag + extra_content
+      content + ActionView::Helpers::InstanceTag.new(
+        @object_name,
+        method,
+        @template,
+        object
+      ).to_input_field_tag('hidden', options)
     end
   end
 end

@@ -44,14 +44,12 @@ Set your API Key in config/application.rb:
     config.has_filepicker_image.api_key = "Your filepicker.io API Key"
 ```
 
-Set your custom default options for the image urls (you can override or add your own options):
+Set your custom default options for the image urls (you can override or add your own options, view pickAndStore options in filepicker documentation):
 ```ruby
     config.has_filepicker_image.defaults = {
-      :'data-fp-store-location'  => 'S3',
-      :'data-fp-extensions'      => '.png,.jpg,.jpeg',
-      :'data-fp-option-services' => 'COMPUTER',
-      :'data-fp-button-text'     => 'Pick File',
-      :'onchange'                => "HasFilepickerImage.previewPickedFile(event);",
+      :'data-location'  => 'S3',
+      :'data-extensions'      => '.png,.jpg,.jpeg',
+      :'data-services' => 'COMPUTER'
     }
 ```
 
@@ -96,6 +94,8 @@ Call filepicker_url on your model passing any of the styles you defined. You can
 _Note: This method accepts a style plus optional paramters for the url or simply optional parameters for the url._
 
 ### In your forms
+
+You can pass an option :delete_button to if you want to display or not the remove button (main reason is to be able to hiden for nested models).
 
 ```erb
 <%= form_for @user do |f| %>

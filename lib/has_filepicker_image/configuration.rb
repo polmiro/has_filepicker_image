@@ -5,10 +5,9 @@ module HasFilepickerImage
 
     def initialize(*args)
       @defaults = {
-        :'data-fp-store-location'  => 'S3',
-        :'data-fp-extensions'      => '.png,.jpg,.jpeg',
-        :'data-fp-option-services' => 'COMPUTER',
-        :'data-fp-button-text'     => 'Pick File',
+        :'data-location'  => 'S3',
+        :'data-extensions'      => '.png,.jpg,.jpeg',
+        :'data-services' => 'COMPUTER',
         :'onchange'                => "HasFilepickerImage.previewPickedFile(event);",
       }
     end
@@ -19,8 +18,7 @@ module HasFilepickerImage
 
     def defaults
       defaults = @defaults.dup
-      defaults[:'data-fp-apikey'] = api_key
-      defaults[:'data-fp-debug']  = true     if ::Rails.env.development? || ::Rails.env.test?
+      defaults[:'data-debug']  = true     if ::Rails.env.development? || ::Rails.env.test?
       defaults
     end
 
