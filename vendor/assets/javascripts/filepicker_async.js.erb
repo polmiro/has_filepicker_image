@@ -35,6 +35,9 @@ filepicker.pickImage = function($button) {
       filepicker.previewPickedImage($elem, url);
       filepicker.addDeleteButton($button, $elem);
       $button.remove();
+    },
+    function(fpfiles) {
+      $button.parent('.fields').remove()
     }
   );
 };
