@@ -18,7 +18,7 @@ module HasFilepickerImage
         preview += "<a href='#' class='btn' data-action='removeImage'><i class='icon-trash'></i></a>" unless options[:'data-delete_button'] == false
         content = preview.html_safe
       else
-        content = @template.content_tag(:a, t('add'), options.merge(:href => '#', :'data-action' => 'pickImage'))
+        content = @template.content_tag(:a, @template.t('add'), options.merge(:href => '#', :'data-action' => 'pickImage'))
       end
 
       content + ActionView::Helpers::InstanceTag.new(
