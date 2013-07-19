@@ -112,6 +112,20 @@ With Rails form builders
 <% end %>
 ```
 
+With simple_form
+```erb
+<%= simple_form_for @user do |f| %>
+  <%= f.input :filepicker_url, as: :filepicker_image_field %>
   <%= f.submit %>
 <% end %>
 ```
+
+With formtastic
+```erb
+<%= simple_form_for @user do |f| %>
+  <%= f.input :filepicker_url, as: :formtastic_filepicker_image_field %>
+  <%= f.submit %>
+<% end %>
+```
+
+
