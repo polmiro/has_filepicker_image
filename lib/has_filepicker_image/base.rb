@@ -9,7 +9,7 @@ module HasFilepickerImage
         self.has_filepicker_image_styles ||= {}
         self.has_filepicker_image_styles.merge!(name.to_sym => options[:styles])
 
-        define_method "#{name}_url" do |*args|
+        define_method name do |*args|
           HasFilepickerImageUrlService.new(
             name:   name,
             url:    read_attribute("#{name}_url"),
@@ -34,11 +34,12 @@ module HasFilepickerImage
         private
 
         def parse_args(*args)
-          raise 'Wrong number of arguments' if args.size > 2
 
           result = {}
 
-          if args.size > 0
+          if args.size > 2
+            raise 'Wrong number of arguments' if args.size > 2
+          elsif args.size > 0
             arg = args[0]
             if arg.is_a?(Hash)
               result = arg
