@@ -47,10 +47,16 @@ Set your API Key in config/application.rb:
 Set your custom default options for the image urls (you can override or add your own options, view pickAndStore options in filepicker documentation):
 ```ruby
     config.has_filepicker_image.defaults = {
-      :'data-location'  => 'S3',
-      :'data-extensions'      => '.png,.jpg,.jpeg',
-      :'data-services' => 'COMPUTER'
-    }
+        :delete_button_html => 'Remove',
+        :pick_button_html   => 'Pick',
+        :html_options => {
+          :'data-location'      => 'S3',
+          :'data-extensions'    => '.png,.jpg,.jpeg',
+          :'data-services'      => 'COMPUTER',
+          :'data-delete_button' => true,
+          :'onchange'           => "HasFilepickerImage.previewPickedFile(event);"
+        }
+      }
 ```
 
 
@@ -95,14 +101,16 @@ _Note: This method accepts a style plus optional paramters for the url or simply
 
 ### In your forms
 
-You can pass an option :delete_button to if you want to display or not the remove button (main reason is to be able to hiden for nested models).
+You can overwrite defaults when using the helpers.
 
+With Rails form builders
 ```erb
 <%= form_for @user do |f| %>
-  <div>
-    <%= f.label :filepicker_url, "Upload Your Avatar:" %>
-    <%= f.filepicker_image_field :filepicker_url %> <!-- User#filepicker_url is a regular string column -->
-  </div>
+  <%= f.label :filepicker_url, "Upload Your Avatar:" %>
+  <%= f.filepicker_image_field :filepicker_url, :delete_button_html => 'Esborrar' %>
+  <%= f.submit %>
+<% end %>
+```
 
   <%= f.submit %>
 <% end %>

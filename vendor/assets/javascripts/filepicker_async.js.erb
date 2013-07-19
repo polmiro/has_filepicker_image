@@ -3,24 +3,15 @@
 filepicker.setKey('<%= ::Rails.application.config.has_filepicker_image.api_key %>');
 
 filepicker.previewPickedImage = function($elem, url) {
-  var $container, element;
-  $container = null;
-  // Container to put the image in
-  if ($elem.find('.filepicker-image').size() > 0) {
-    // Container exists from previous file picked
-    $container = $elem.find('.filepicker-image:first');
-  } else {
-    // Create new container
-    $container = $("<div class='filepicker-image'></div>");
-    $elem.prepend($container);
-  }
-  $container.html("<img src='" + url + '/convert?w=50&h=50' + '\'/>');
+  var $container = $elem.find('.filepicker-image:first');
+  var img = $("<img src='" + url + '/convert?w=50&h=50' + '\'/>');
+  $container.html(img);
   return true;
 };
 
 filepicker.addDeleteButton = function($button, $elem) {
   if ($button.data('delete_button') !== false)
-    $elem.append("<a href='#' class='btn' data-action='removeImage'><i class='icon-trash'></i></a>");
+    $elem.append("<a href='#' class='btn' data-action='removeImage'><%= Rails.application.config.has_filepicker_image.defaults[:delete_button_html] %></a>");
 };
 
 filepicker.pickImage = function($button) {
@@ -34,13 +25,18 @@ filepicker.pickImage = function($button) {
       $elem.find('input[type=hidden]').val(url);
       filepicker.previewPickedImage($elem, url);
       filepicker.addDeleteButton($button, $elem);
-      $button.remove();
+      $button.hide();
     },
     function(fpfiles) {
-      $button.parent('.fields').remove()
+      alert('Error uploading file');
     }
   );
 };
+
+$(document).on('click', '.has_many.attachments .button', function(event) {
+  $input_element = $(this).closest('.has_many.attachments').find("[type='filepicker']:last");
+  filepicker.pickImange( $element );
+});
 
 $(document).on('nested:fieldAdded', function(event) {
   var field = event.field;
@@ -60,11 +56,9 @@ $(document).on('click', 'a[data-action=removeImage]', function(event) {
 
   var $this = $(this);
   var $parent = $this.parent();
-  var $button = $("<a href='#' data-action='pickImage' class='btn'>Pick</a>");
-
-  $button.data( $parent.find('input[type=hidden]').data() );
-  $parent.append( $button );
   $parent.find('input[type=hidden]').val('');
-  $parent.find('.filepicker-image, [data-action=removeImage]').remove();
+  $parent.find('.filepicker-image').html('');
+  $parent.find('[data-action=removeImage]').hide();
+  $parent.find('[data-action=pickImage]').show();
 });
 

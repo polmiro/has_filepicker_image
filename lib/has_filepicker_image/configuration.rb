@@ -1,15 +1,20 @@
 module HasFilepickerImage
   class Configuration
     attr_writer :api_key
-    attr_writer :defaults
 
     def initialize(*args)
       @defaults = {
-        :'data-location'  => 'S3',
-        :'data-extensions'      => '.png,.jpg,.jpeg',
-        :'data-services' => 'COMPUTER',
-        :'onchange'                => "HasFilepickerImage.previewPickedFile(event);",
+        :delete_button_html => 'Remove',
+        :pick_button_html   => 'Pick',
+        :html_options => {
+          :'data-location'      => 'S3',
+          :'data-extensions'    => '.png,.jpg,.jpeg',
+          :'data-services'      => 'COMPUTER',
+          :'data-delete_button' => true,
+          :'onchange'           => "HasFilepickerImage.previewPickedFile(event);"
+        }
       }
+      @defaults[:html_options][:'data-debug'] = true if ::Rails.env.development? || ::Rails.env.test?
     end
 
     def api_key
@@ -17,9 +22,11 @@ module HasFilepickerImage
     end
 
     def defaults
-      defaults = @defaults.dup
-      defaults[:'data-debug']  = true     if ::Rails.env.development? || ::Rails.env.test?
-      defaults
+      @defaults
+    end
+
+    def defaults=(opts)
+      @defaults.merge!(opts)
     end
 
   end

@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe HasFilepickerImage::FormBuilderMixin do
+describe HasFilepickerImage::FormBuilderHelper do
   class FormBuilder < ActionView::Helpers::FormBuilder
-    include HasFilepickerImage::FormBuilderMixin
+    include HasFilepickerImage::FormBuilderHelper
   end
 
   describe "#filepicker_image_field" do

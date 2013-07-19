@@ -9,7 +9,7 @@ module HasFilepickerImage
       end
 
       class ActionView::Helpers::FormBuilder
-        include HasFilepickerImage::FormBuilderMixin
+        include HasFilepickerImage::FormBuilderHelper
       end
     end
 
