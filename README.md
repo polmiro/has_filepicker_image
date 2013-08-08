@@ -84,7 +84,7 @@ end
 ```ruby
 class User < ActiveRecord::Base
   attr_accessible :avatar
-  has_attached_file :avatar, styles: { medium: [300,300], thumb: [100,100] }
+  has_filepicker_image :avatar, styles: { medium: [300,300], thumb: [100,100] }
 end
 ```
 
@@ -115,7 +115,7 @@ With Rails form builders
 With simple_form
 ```erb
 <%= simple_form_for @user do |f| %>
-  <%= f.input :filepicker_url, as: :filepicker_image_field %>
+  <%= f.input :filepicker_url, as: :filepicker_image %>
   <%= f.submit %>
 <% end %>
 ```
@@ -123,7 +123,7 @@ With simple_form
 With formtastic
 ```erb
 <%= simple_form_for @user do |f| %>
-  <%= f.input :filepicker_url, as: :formtastic_filepicker_image_field %>
+  <%= f.input :filepicker_url, as: :formtastic_filepicker_image %>
   <%= f.submit %>
 <% end %>
 ```
