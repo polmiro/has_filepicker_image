@@ -28,19 +28,19 @@ describe HasFilepickerImage::FormBuilderHelper do
 
     it "returns the filepicker input field" do
       filepicker_image_field.should ==
-      "<a class=\"btn\" data-action=\"pickImage\" href=\"#\">Pick</a><input class=\"btn\" id=\"test_model_image_url\" name=\"test_model[image_url]\" type=\"hidden\" />"
+      "<div class='filepicker-image'></div><a data-action=\"pickImage\" href=\"#\"></a><input id=\"test_model_image_url\" name=\"test_model[image_url]\" type=\"hidden\" />"
     end
 
     it "returns input with defaults options" do
-      @configuration.stub(:defaults).and_return(:'data-fp-debug' => true)
+      @configuration.stub(:defaults).and_return(:html_options => { :'data-fp-debug' => true })
       filepicker_image_field.should ==
-      "<a class=\"btn\" data-action=\"pickImage\" data-fp-debug=\"true\" href=\"#\">Pick</a><input class=\"btn\" data-fp-debug=\"true\" id=\"test_model_image_url\" name=\"test_model[image_url]\" type=\"hidden\" />"
+      "<div class='filepicker-image'></div><a data-action=\"pickImage\" data-fp-debug=\"true\" href=\"#\"></a><input id=\"test_model_image_url\" name=\"test_model[image_url]\" type=\"hidden\" />"
     end
 
     it "returns the filepicker input with value and an the image tag when model has url has value" do
       model.image_url = 'http://filepicker.io/images/1'
       filepicker_image_field.should ==
-      "<div class='filepicker-image'><img alt=\"image_url thumbnail\" src=\"http://filepicker.io/images/1/convert?w=260&amp;h=180\" /></div><a href='#' class='btn' data-action='removeImage'><i class='icon-trash'></i></a><input class=\"btn\" id=\"test_model_image_url\" name=\"test_model[image_url]\" type=\"hidden\" value=\"http://filepicker.io/images/1\" />"
+      "<div class='filepicker-image'><img alt=\"image_url thumbnail\" src=\"http://filepicker.io/images/1/convert?w=260&amp;h=180\" /></div><input id=\"test_model_image_url\" name=\"test_model[image_url]\" type=\"hidden\" value=\"http://filepicker.io/images/1\" />"
     end
 
   end
