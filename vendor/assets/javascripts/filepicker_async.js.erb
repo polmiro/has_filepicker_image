@@ -9,9 +9,12 @@ filepicker.previewPickedImage = function($elem, url) {
   return true;
 };
 
-filepicker.addDeleteButton = function($button, $elem) {
-  if ($button.data('delete_button') !== false)
-    $elem.append("<a href='#' class='btn' data-action='removeImage'><%= Rails.application.config.has_filepicker_image.defaults[:delete_button_html] %></a>");
+filepicker.removeImage = function($button) {
+  var $parent = $button.parent();
+  $parent.find('input[type=hidden]').val('');
+  $parent.find('.filepicker-image').html('');
+  $parent.find('[data-action=removeImage]').hide();
+  $parent.find('[data-action=pickImage]').show();
 };
 
 filepicker.pickImage = function($button) {
@@ -24,7 +27,7 @@ filepicker.pickImage = function($button) {
       var url = fpfiles[0].url;
       $elem.find('input[type=hidden]').val(url);
       filepicker.previewPickedImage($elem, url);
-      filepicker.addDeleteButton($button, $elem);
+      $elem.find('[data-action=removeImage]').show();
       $button.hide();
     },
     function(fpfiles) {
@@ -41,9 +44,8 @@ $(document).on('click', '.has_many.attachments .button', function(event) {
 $(document).on('nested:fieldAdded', function(event) {
   var field = event.field;
   var $element = field.find("[data-action=pickImage]");
-  if ($element.size() > 0) {
+  if ($element.size() > 0)
     filepicker.pickImage( $element );
-  }
 });
 
 $(document).on('click', 'a[data-action=pickImage]', function(event) {
@@ -54,11 +56,6 @@ $(document).on('click', 'a[data-action=pickImage]', function(event) {
 $(document).on('click', 'a[data-action=removeImage]', function(event) {
   event.preventDefault();
 
-  var $this = $(this);
-  var $parent = $this.parent();
-  $parent.find('input[type=hidden]').val('');
-  $parent.find('.filepicker-image').html('');
-  $parent.find('[data-action=removeImage]').hide();
-  $parent.find('[data-action=pickImage]').show();
+  filepicker.removeImage( $(this) )
 });
 

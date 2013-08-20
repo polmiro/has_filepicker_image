@@ -53,7 +53,6 @@ Set your custom default options for the image urls (you can override or add your
           :'data-location'      => 'S3',
           :'data-extensions'    => '.png,.jpg,.jpeg',
           :'data-services'      => 'COMPUTER',
-          :'data-delete_button' => true,
           :'onchange'           => "HasFilepickerImage.previewPickedFile(event);"
         }
       }

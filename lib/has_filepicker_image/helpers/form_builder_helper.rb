@@ -7,28 +7,32 @@ module HasFilepickerImage
       options = config.defaults.deep_merge(opts)
       html_options = options[:html_options] || {}
 
-      content = if value.present?
-        # Render preview + Delete link
-        thumb_url = value + "/convert?w=260&h=180"
-        thumb_alt = "#{attribute_name} thumbnail"
-
-        preview = "<div class='filepicker-image'>#{@template.image_tag(thumb_url, alt: thumb_alt)}</div>"
-        preview += "<a href='#' class='btn' data-action='removeImage'>#{options[:delete_button_html]}</a>" if html_options[:'data-delete_button']
-        preview.html_safe
-      else
-        # Render Add link
-        "<div class='filepicker-image'></div>".html_safe +
-        @template.content_tag(:a,
-          options[:pick_button_html],
-          html_options.merge(
-            :href  => '#',
-            :value => value,
-            :'data-action' => 'pickImage'
-          )
-        )
+      preview = @template.content_tag(:div, :class => 'filepicker-image') do
+        if value.present?
+          # Render preview + Delete link
+          thumb_url = value + "/convert?w=260&h=180"
+          thumb_alt = "#{attribute_name} thumbnail"
+          @template.image_tag(thumb_url, alt: thumb_alt )
+        end
       end
 
-      content + ActionView::Helpers::InstanceTag.new(
+      pick_button = @template.content_tag(:a,
+        options[:pick_button_html],
+        html_options.merge(
+          :href  => '#',
+          :style => value.present? ? 'display:none;' : '',
+          :'data-action' => 'pickImage'
+        )
+      )
+
+      remove_button = @template.link_to(
+        options[:delete_button_html],
+        '#',
+        :style => value.present? ? '' : 'display:none;',
+        :'data-action' => 'removeImage'
+      )
+
+      preview + pick_button + remove_button + ActionView::Helpers::InstanceTag.new(
         @object_name,
         attribute_name,
         @template,

@@ -10,7 +10,6 @@ module HasFilepickerImage
           :'data-location'      => 'S3',
           :'data-extensions'    => '.png,.jpg,.jpeg',
           :'data-services'      => 'COMPUTER',
-          :'data-delete_button' => true,
           :'onchange'           => "HasFilepickerImage.previewPickedFile(event);"
         }
       }
