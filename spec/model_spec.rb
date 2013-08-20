@@ -24,19 +24,19 @@ describe TestModel do
 
     context "when called with options" do
       it "returns the url with the options" do
-        model.image(w: 1, h: 2).should == 'http://filepicker.io/image/convert?w=1&h=2&fit=max'
+        model.image(w: 1, h: 2).should == 'http://filepicker.io/image/convert?w=1&h=2&fit=max&dl=false'
       end
     end
 
     context "when called with a style" do
       it "returns the url with the dimensions of the style" do
-        model.image(:small).should == 'http://filepicker.io/image/convert?w=50&h=100&fit=max'
+        model.image(:small).should == 'http://filepicker.io/image/convert?w=50&h=100&fit=max&dl=false'
       end
     end
 
     context "when called with a style and options" do
       it "returns the url with the dimensions of the style" do
-        model.image(:small, fit: 'crop').should == 'http://filepicker.io/image/convert?fit=crop&w=50&h=100'
+        model.image(:small, fit: 'crop').should == 'http://filepicker.io/image/convert?fit=crop&w=50&h=100&dl=false'
       end
     end
   end

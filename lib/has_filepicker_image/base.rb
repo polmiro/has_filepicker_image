@@ -49,7 +49,8 @@ module HasFilepickerImage
               result[:h] = @styles[arg][1]
             end
             result[:fit] ||= 'max'
-            result.assert_valid_keys(:w, :h, :fit)
+            result[:dl]  ||= 'false'
+            result.assert_valid_keys(:w, :h, :fit, :dl)
           end
 
           result
