@@ -34,7 +34,7 @@ describe HasFilepickerImage::FormBuilderHelper do
         "<a data-action=\"pickImage\" href=\"#\" style=\"\">Pick</a>" +
         "<a href=\"#\" data-action=\"removeImage\" style=\"display:none;\">Remove</a>" +
       "</div>" +
-      "<div class=\"filepicker-image\"></div>" +
+      "<div class=\"filepicker-image\" style=\"display:none;\"></div>" +
       "<input id=\"test_model_image_url\" name=\"test_model[image_url]\" type=\"hidden\" />"
     end
 
@@ -45,7 +45,7 @@ describe HasFilepickerImage::FormBuilderHelper do
         "<a data-action=\"pickImage\" data-fp-debug=\"true\" href=\"#\" style=\"\">Pick</a>" +
         "<a href=\"#\" data-action=\"removeImage\" style=\"display:none;\">Remove</a>" +
       "</div>" +
-      "<div class=\"filepicker-image\"></div>" +
+      "<div class=\"filepicker-image\" style=\"display:none;\"></div>" +
       "<input id=\"test_model_image_url\" name=\"test_model[image_url]\" type=\"hidden\" />"
     end
 
@@ -56,7 +56,7 @@ describe HasFilepickerImage::FormBuilderHelper do
         "<a data-action=\"pickImage\" href=\"#\" style=\"\">Pick Image</a>" +
         "<a href=\"#\" data-action=\"removeImage\" style=\"display:none;\">Remove Image</a>" +
       "</div>" +
-      "<div class=\"filepicker-image\"></div>" +
+      "<div class=\"filepicker-image\" style=\"display:none;\"></div>" +
       "<input id=\"test_model_image_url\" name=\"test_model[image_url]\" type=\"hidden\" />"
     end
 
@@ -67,7 +67,7 @@ describe HasFilepickerImage::FormBuilderHelper do
         "<a data-action=\"pickImage\" href=\"#\" style=\"display:none;\">Pick</a>" +
         "<a href=\"#\" data-action=\"removeImage\" style=\"\">Remove</a>" +
       "</div>" +
-      "<div class=\"filepicker-image\"><img alt=\"image_url thumbnail\" src=\"http://filepicker.io/images/1/convert?w=260&amp;h=180\" /></div>" +
+      "<div class=\"filepicker-image\" style=\"\"><img alt=\"image_url thumbnail\" src=\"http://filepicker.io/images/1/convert?w=260&amp;h=180\" /></div>" +
       "<input id=\"test_model_image_url\" name=\"test_model[image_url]\" type=\"hidden\" value=\"http://filepicker.io/images/1\" />"
     end
 

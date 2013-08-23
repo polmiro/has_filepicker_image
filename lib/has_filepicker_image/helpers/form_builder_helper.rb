@@ -7,7 +7,7 @@ module HasFilepickerImage
       options = config.defaults.deep_merge(opts)
       html_options = options[:html_options] || {}
 
-      preview = @template.content_tag(:div, :class => 'filepicker-image') do
+      preview = @template.content_tag(:div, :class => 'filepicker-image', :style => (value.present? ? '' : 'display:none;')) do
         if value.present?
           # Render preview + Delete link
           thumb_url = value + "/convert?w=260&h=180"
@@ -32,7 +32,11 @@ module HasFilepickerImage
         :'data-action' => 'removeImage'
       )
 
-      buttons = @template.content_tag(:div, pick_button + remove_button, :class => 'filepicker-button')
+      buttons = @template.content_tag(
+        :div,
+        pick_button + remove_button,
+        :class => 'filepicker-button'
+      )
 
       buttons + preview + ActionView::Helpers::InstanceTag.new(
         @object_name,
