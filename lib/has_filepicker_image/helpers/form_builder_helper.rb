@@ -32,7 +32,7 @@ module HasFilepickerImage
         :'data-action' => 'removeImage'
       )
 
-      preview + pick_button + remove_button + ActionView::Helpers::InstanceTag.new(
+      pick_button + remove_button + preview + ActionView::Helpers::InstanceTag.new(
         @object_name,
         attribute_name,
         @template,
