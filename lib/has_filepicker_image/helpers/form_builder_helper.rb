@@ -32,7 +32,9 @@ module HasFilepickerImage
         :'data-action' => 'removeImage'
       )
 
-      pick_button + remove_button + preview + ActionView::Helpers::InstanceTag.new(
+      buttons = @template.content_tag(:div, pick_button + remove_button, :class => 'filepicker-button')
+
+      buttons + preview + ActionView::Helpers::InstanceTag.new(
         @object_name,
         attribute_name,
         @template,

@@ -2,32 +2,33 @@
 
 filepicker.setKey('<%= ::Rails.application.config.has_filepicker_image.api_key %>');
 
-filepicker.previewPickedImage = function($elem, url) {
-  var $container = $elem.find('.filepicker-image:first');
+filepicker.previewPickedImage = function($container, url) {
+  var $imageContainer = $container.find('.filepicker-image');
   var img = $("<img src='" + url + '/convert?w=50&h=50' + '\'/>');
-  $container.html(img);
+  $imageContainer.html(img);
   return true;
 };
 
 filepicker.removeImage = function($button) {
-  var $parent = $button.parent();
-  $parent.find('input[type=hidden]').val('');
-  $parent.find('.filepicker-image').html('');
-  $parent.find('[data-action=removeImage]').hide();
-  $parent.find('[data-action=pickImage]').show();
+  var $container = $button.parent().parent();
+  $container.find('input[type=hidden]').val('');
+  $container.find('.filepicker-image').html('').hide();
+  $container.find('[data-action=removeImage]').hide();
+  $container.find('[data-action=pickImage]').show();
 };
 
 filepicker.pickImage = function($button) {
   var data = $button.data();
-  var $elem = $button.parent();
+  var $container = $button.parent().parent();
   filepicker.pickAndStore(
     data,
     data,
     function(fpfiles) {
       var url = fpfiles[0].url;
-      $elem.find('input[type=hidden]').val(url);
-      filepicker.previewPickedImage($elem, url);
-      $elem.find('[data-action=removeImage]').show();
+      $container.find('input[type=hidden]').val(url);
+      filepicker.previewPickedImage($container, url);
+      $container.find('[data-action=removeImage]').show();
+      $container.find('.filepicker-image').show();
       $button.hide();
     },
     function(fpfiles) {
