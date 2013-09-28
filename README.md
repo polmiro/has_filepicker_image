@@ -58,7 +58,22 @@ Set your custom default options for the image urls (you can override or add your
       }
 ```
 
-
+If you have multiple options that you want to use, you can add them like this:
+```ruby
+    config.has_filepicker_image.add_config(
+      'doc',
+      {
+        :delete_button_html => 'Remove',
+        :pick_button_html   => 'Pick',
+        :html_options => {
+          :'data-location'      => 'S3',
+          :'data-extensions'    => '.png,.jpg,.jpeg',
+          :'data-services'      => 'COMPUTER',
+          :'onchange'           => "HasFilepickerImage.previewPickedFile(event);"
+        }
+      }
+    )
+```
 
 ## Usage
 ### Migration
@@ -107,6 +122,7 @@ With Rails form builders
 <%= form_for @user do |f| %>
   <%= f.label :filepicker_url, "Upload Your Avatar:" %>
   <%= f.filepicker_image_field :filepicker_url, :delete_button_html => 'Esborrar' %>
+  <%= f.filepicker_field :filepicker_url, 'doc', :delete_button_html => 'Esborrar' %>
   <%= f.submit %>
 <% end %>
 ```
