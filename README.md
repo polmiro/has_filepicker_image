@@ -27,12 +27,12 @@ $ gem install has_filepicker_image
 ```
 
 
-Add the filepicker.io async javascript library to your layout head or your javascript asset pipeline manifest:
+Add the filepicker.io async javascript library to your layout head:
 
 ```ruby
 <%= filepicker_async_js_include_tag %>
 ```
-or
+or your javascript asset pipeline manifest:
 ```
 //= require 'filepicker_async'
 ```
@@ -46,30 +46,37 @@ Set your API Key in config/application.rb:
 
 Set your custom default options for the image urls (you can override or add your own options, view pickAndStore options in filepicker documentation):
 ```ruby
-    config.has_filepicker_image.defaults = {
-        :delete_button_html => 'Remove',
-        :pick_button_html   => 'Pick',
-        :html_options => {
-          :'data-location'      => 'S3',
-          :'data-extensions'    => '.png,.jpg,.jpeg',
-          :'data-services'      => 'COMPUTER',
-          :'onchange'           => "HasFilepickerImage.previewPickedFile(event);"
-        }
-      }
+
+    #  Defaults:
+    #  {
+    #    :delete_button_html => 'Remove',
+    #    :pick_button_html   => 'Pick',
+    #    :html_options => {
+    #      :'data-location'      => 'S3',
+    #      :'data-extensions'    => '.png,.jpg,.jpeg',
+    #      :'data-services'      => 'COMPUTER',
+    #      :'onchange'           => "HasFilepickerImage.previewPickedFile(event);"
+    #    }
+    #  }
+
+
+    config.has_filepicker_image.defaults.merge!(
+      :delete_button_html => 'Delete',
+      :pick_button_html   => 'Add',
+    )
 ```
 
-If you have multiple options that you want to use, you can add them like this:
+If you have multiple configurations that you want to use, you can add them like this:
 ```ruby
     config.has_filepicker_image.add_config(
       'doc',
       {
-        :delete_button_html => 'Remove',
-        :pick_button_html   => 'Pick',
+        :delete_button_html => 'Delete',
+        :pick_button_html   => 'Select',
         :html_options => {
           :'data-location'      => 'S3',
-          :'data-extensions'    => '.png,.jpg,.jpeg',
+          :'data-extensions'    => '.pdf',
           :'data-services'      => 'COMPUTER',
-          :'onchange'           => "HasFilepickerImage.previewPickedFile(event);"
         }
       }
     )
