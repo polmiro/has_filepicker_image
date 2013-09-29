@@ -1,10 +1,14 @@
 module HasFilepickerImage
   module FormBuilderHelper
     def filepicker_image_field(attribute_name, opts = {})
+      filepicker_field(attribute_name, 'default', opts)
+    end
+
+    def filepicker_field(attribute_name, config_name, opts = {})
       config = Rails.application.config.has_filepicker_image
 
       value = object.send(attribute_name)
-      options = config.defaults.deep_merge(opts)
+      options = config.get_config(config_name).deep_merge(opts)
       html_options = options[:html_options] || {}
 
       preview = @template.content_tag(:div, :class => 'filepicker-image', :style => (value.present? ? '' : 'display:none;')) do
