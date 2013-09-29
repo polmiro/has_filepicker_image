@@ -8,28 +8,22 @@ describe HasFilepickerImage::FormBuilderHelper do
   describe "#filepicker_image_field" do
     before do
       @configuration = HasFilepickerImage::Configuration.new
-      @configuration.stub(:defaults).and_return(default_config)
+      @configuration.defaults = {
+        :pick_button_html => 'Pick',
+        :delete_button_html => 'Remove'
+      }
       allow_message_expectations_on_nil
-      ::Rails.application.stub_chain("config.has_filepicker_image").and_return(@configuration)
-      ::Rails.env == 'production'
+      ::Rails.application.stub_chain(:config, :has_filepicker_image).and_return(@configuration)
     end
-
-  let(:default_config) { {:pick_button_html => 'Pick', :delete_button_html => 'Remove'} }
 
     let(:model)   { TestModel.new }
-
-    let(:builder) do
-      FormBuilder.new(:test_model, model, ActionView::Base.new, {}, proc {})
+    let(:builder) { FormBuilder.new(:test_model, model, ActionView::Base.new, {}, proc {}) }
+    it "should add a filepicker_image_field method" do
+      builder.should respond_to(:filepicker_image_field)
     end
-
-    let(:filepicker_image_field) do
-      builder.filepicker_image_field(:image_url)
-    end
-
-    it {  builder.should respond_to(:filepicker_image_field) }
 
     it "returns the filepicker input field" do
-      filepicker_image_field.should ==
+      builder.filepicker_image_field(:image_url).should ==
       "<div class=\"filepicker-button\">" +
         "<a data-action=\"pickImage\" href=\"#\" style=\"\">Pick</a>" +
         "<a href=\"#\" data-action=\"removeImage\" style=\"display:none;\">Remove</a>" +
@@ -38,9 +32,23 @@ describe HasFilepickerImage::FormBuilderHelper do
       "<input id=\"test_model_image_url\" name=\"test_model[image_url]\" type=\"hidden\" />"
     end
 
-    it "returns input with defaults options" do
-      @configuration.stub(:defaults).and_return(default_config.deep_merge(:html_options => { :'data-fp-debug' => true }))
-      filepicker_image_field.should ==
+    it "returns the filepicker input with preview" do
+      model.image_url = 'http://filepicker.io/images/1'
+      builder.filepicker_image_field(:image_url).should ==
+      "<div class=\"filepicker-button\">" +
+        "<a data-action=\"pickImage\" href=\"#\" style=\"display:none;\">Pick</a>" +
+        "<a href=\"#\" data-action=\"removeImage\" style=\"\">Remove</a>" +
+      "</div>" +
+      "<div class=\"filepicker-image\" style=\"\"><img alt=\"image_url thumbnail\" src=\"http://filepicker.io/images/1/convert?w=260&amp;h=180\" /></div>" +
+      "<input id=\"test_model_image_url\" name=\"test_model[image_url]\" type=\"hidden\" value=\"http://filepicker.io/images/1\" />"
+    end
+
+    it "returns the filepicker input with defaults options" do
+      @configuration.defaults = @configuration.defaults.deep_merge(
+        :html_options => { :'data-fp-debug' => true }
+      )
+
+      builder.filepicker_image_field(:image_url).should ==
       "<div class=\"filepicker-button\">" +
         "<a data-action=\"pickImage\" data-fp-debug=\"true\" href=\"#\" style=\"\">Pick</a>" +
         "<a href=\"#\" data-action=\"removeImage\" style=\"display:none;\">Remove</a>" +
@@ -49,26 +57,36 @@ describe HasFilepickerImage::FormBuilderHelper do
       "<input id=\"test_model_image_url\" name=\"test_model[image_url]\" type=\"hidden\" />"
     end
 
-    it "returns input with custom pick and custom remove buttons" do
-      @configuration.stub(:defaults).and_return(default_config.deep_merge(:delete_button_html => 'Remove Image', :pick_button_html => 'Pick Image'))
-      filepicker_image_field.should ==
+    it "returns the filepicker input with custom options" do
+      @configuration.defaults = {
+        :pick_button_html => 'Add Photo',
+        :delete_button_html => 'Remove Photo'
+      }
+
+      builder.filepicker_image_field(:image_url).should ==
       "<div class=\"filepicker-button\">" +
-        "<a data-action=\"pickImage\" href=\"#\" style=\"\">Pick Image</a>" +
-        "<a href=\"#\" data-action=\"removeImage\" style=\"display:none;\">Remove Image</a>" +
+        "<a data-action=\"pickImage\" href=\"#\" style=\"\">Add Photo</a>" +
+        "<a href=\"#\" data-action=\"removeImage\" style=\"display:none;\">Remove Photo</a>" +
       "</div>" +
       "<div class=\"filepicker-image\" style=\"display:none;\"></div>" +
       "<input id=\"test_model_image_url\" name=\"test_model[image_url]\" type=\"hidden\" />"
     end
 
-    it "returns input with preview" do
-      model.image_url = 'http://filepicker.io/images/1'
-      filepicker_image_field.should ==
+
+    it "returns input with a different config" do
+      @configuration.add_config(
+        :picture_config,
+        :pick_button_html => 'Add Picture',
+        :delete_button_html => 'Remove Picture'
+      )
+
+      builder.filepicker_image_field(:image_url, :picture_config).should ==
       "<div class=\"filepicker-button\">" +
-        "<a data-action=\"pickImage\" href=\"#\" style=\"display:none;\">Pick</a>" +
-        "<a href=\"#\" data-action=\"removeImage\" style=\"\">Remove</a>" +
+        "<a data-action=\"pickImage\" href=\"#\" style=\"\">Add Picture</a>" +
+        "<a href=\"#\" data-action=\"removeImage\" style=\"display:none;\">Remove Picture</a>" +
       "</div>" +
-      "<div class=\"filepicker-image\" style=\"\"><img alt=\"image_url thumbnail\" src=\"http://filepicker.io/images/1/convert?w=260&amp;h=180\" /></div>" +
-      "<input id=\"test_model_image_url\" name=\"test_model[image_url]\" type=\"hidden\" value=\"http://filepicker.io/images/1\" />"
+      "<div class=\"filepicker-image\" style=\"display:none;\"></div>" +
+      "<input id=\"test_model_image_url\" name=\"test_model[image_url]\" type=\"hidden\" />"
     end
 
   end

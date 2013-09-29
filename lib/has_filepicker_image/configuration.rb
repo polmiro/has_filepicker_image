@@ -30,16 +30,22 @@ module HasFilepickerImage
     end
 
     def defaults=(opts)
-      @conf[:default].merge!(opts)
+      @conf[:default] = opts
     end
 
     def add_config(name, value)
       @conf[name] = value
     end
 
-    def get_config(name)
-      @conf[name]
+    def get_config(name = nil)
+      if name
+        unless @conf.has_key?(name)
+          raise 'HasFilepickerImage configuration does not exist'
+        end
+        @conf[name]
+      else
+        defaults
+      end
     end
-
   end
 end

@@ -1,11 +1,27 @@
 module HasFilepickerImage
   module FormBuilderHelper
-    def filepicker_image_field(attribute_name, opts = {})
-      filepicker_field(attribute_name, 'default', opts)
+    def filepicker_image_field(attribute_name, *args)
+      filepicker_field(attribute_name, *args)
     end
 
-    def filepicker_field(attribute_name, config_name, opts = {})
+    def filepicker_field(attribute_name, *args)
       config = Rails.application.config.has_filepicker_image
+      config_name = nil
+      opts = {}
+
+      case args.size
+      when 0
+      when 1
+        if args[0].is_a?(Hash)
+          opts = args[0]
+        else
+          config_name = args[0]
+        end
+      when 2
+        config_name, opts = args
+      else
+        raise ArgumentError.new('Wrong number of arguments for filepicker_field')
+      end
 
       value = object.send(attribute_name)
       options = config.get_config(config_name).deep_merge(opts)
