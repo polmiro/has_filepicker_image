@@ -18,6 +18,7 @@ describe HasFilepickerImage::FormBuilderHelper do
 
     let(:model)   { TestModel.new }
     let(:builder) { FormBuilder.new(:test_model, model, ActionView::Base.new, {}, proc {}) }
+
     it "should add a filepicker_image_field method" do
       builder.should respond_to(:filepicker_image_field)
     end

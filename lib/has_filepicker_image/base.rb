@@ -28,10 +28,21 @@ module HasFilepickerImage
         end
 
         def url
-          @base_url && @base_url + conversion_component
+          replace_asset_host(@base_url) + conversion_component if @base_url.present?
         end
 
         private
+
+        def replace_asset_host(url)
+          asset_host = Rails.application.config.has_filepicker_image.asset_host
+          if asset_host
+            uri = URI(url)
+            uri.host = asset_host
+            uri.to_s
+          else
+            url
+          end
+        end
 
         def parse_args(*args)
 

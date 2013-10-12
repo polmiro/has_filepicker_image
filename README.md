@@ -44,6 +44,11 @@ Set your API Key in config/application.rb:
     config.has_filepicker_image.api_key = "Your filepicker.io API Key"
 ```
 
+Set your asset host (if you are using a CDN):
+```ruby
+    config.has_filepicker_image.asset_host = "disdojo11oijdf.cloudfront.net"
+```
+
 Set your custom default options for the image urls (you can override or add your own options, view pickAndStore options in filepicker documentation):
 ```ruby
 

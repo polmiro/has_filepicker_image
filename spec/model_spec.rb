@@ -4,6 +4,8 @@ describe TestModel do
 
   before(:each) do
     clean_database
+    allow_message_expectations_on_nil
+    ::Rails.application.stub_chain(:config, :has_filepicker_image, :asset_host).and_return(nil)
   end
 
   let(:model) { TestModel.new(image_url: 'http://filepicker.io/image') }
@@ -13,6 +15,14 @@ describe TestModel do
       it "returns nil" do
         model.image_url = nil
         model.image.should be_nil
+      end
+    end
+
+    context "when CDN configured" do
+      it "returns nil" do
+        cdn = 'cdn.net'
+        ::Rails.application.stub_chain(:config, :has_filepicker_image, :asset_host).and_return(cdn)
+        model.image.should == 'http://cdn.net/image'
       end
     end
 

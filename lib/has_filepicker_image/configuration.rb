@@ -1,6 +1,7 @@
 module HasFilepickerImage
   class Configuration
     attr_writer :api_key
+    attr_accessor :asset_host
 
     def initialize(*args)
       @conf = HashWithIndifferentAccess.new
