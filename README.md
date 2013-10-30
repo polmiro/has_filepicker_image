@@ -119,11 +119,13 @@ end
 Call filepicker_url on your model passing any of the styles you defined. You can any filepicker.io options [the filepicker.io documentation](https://developers.filepicker.io/docs/web/#fpurl-images).
 
 ```erb
-<%= image_tag @user.filepicker_url(:thumb), options %> ---> 'http://filepicker.io/images?w=60&w=40' having defined styles: { thumb: [60,40]}
-<%= image_tag @user.filepicker_url(:thumb, fit: 'crop'), options %> ---> 'http://filepicker.io/images?w=60&w=40&fit=crop'
-<%= image_tag @user.filepicker_url(w: 10, h: 20), options %> ---> 'http://filepicker.io/images?w=10&h=20'
+<%= image_tag @user.avatar(:thumb), options %> ---> 'http://filepicker.io/images?w=60&w=40&cache=true&dl=false' having defined styles: { thumb: [60,40]}
+<%= image_tag @user.avatar(:thumb, fit: 'crop'), options %> ---> 'http://filepicker.io/images?w=60&w=40&cache=true&fit=crop&dl=false'
+<%= image_tag @user.avatar(w: 10, h: 20), options %> ---> 'http://filepicker.io/images?w=10&h=20&cache=true&dl=false'
+<%= image_tag @user.avatar(cache: 'false', dl: 'true'), options %> ---> 'http://filepicker.io/images?cache=false&dl=true'
 ```
-_Note: This method accepts a style plus optional paramters for the url or simply optional parameters for the url._
+_Note 1: This method accepts a style plus optional paramters for the url or simply optional parameters for the url._
+_Note 2: Cache headers are enabled and download is disabled by default.
 
 ### In your forms
 

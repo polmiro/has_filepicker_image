@@ -24,11 +24,11 @@ module HasFilepickerImage
           @name     = params[:name]
           @base_url = params[:url]
           @styles   = params[:styles]
-          @options  = parse_args(*params[:args])
+          @retrieval_options, @conversion_options = parse_options(*params[:args])
         end
 
         def url
-          replace_asset_host(@base_url) + conversion_component if @base_url.present?
+          replace_asset_host(@base_url) + query_component if @base_url.present?
         end
 
         private
@@ -44,32 +44,40 @@ module HasFilepickerImage
           end
         end
 
-        def parse_args(*args)
-
-          result = {}
+        def parse_options(*args)
+          retrieval_options = HashWithIndifferentAccess.new(:cache => true, :dl => 'false')
+          conversion_options = HashWithIndifferentAccess.new
 
           if args.size > 2
             raise 'Wrong number of arguments' if args.size > 2
           elsif args.size > 0
+            hash = {}
             arg = args[0]
             if arg.is_a?(Hash)
-              result = arg
+              hash.merge!(arg)
             else
-              result = args[1] || {}
-              result[:w] = @styles[arg][0]
-              result[:h] = @styles[arg][1]
+              hash.merge!(args[1]) if args[1]
+              hash[:w] = @styles[arg][0]
+              hash[:h] = @styles[arg][1]
             end
-            result[:fit] ||= 'max'
-            result[:dl]  ||= 'false'
-            result.assert_valid_keys(:w, :h, :fit, :dl)
+            hash.assert_valid_keys(:w, :h, :fit, :dl, :cache)
+            retrieval_options.merge!(hash.slice(:dl, :cache))
+            conversion_options.merge!(hash.slice(:w, :h, :fit))
+            conversion_options[:fit] ||= 'max' if conversion_options.present?
           end
 
-          result
+          [retrieval_options, conversion_options]
         end
 
-        def conversion_component
-          @options.empty? ? '' : '/convert?' + @options.map { |k,v| "#{k}=#{v}" }.join('&')
+        def query_component
+          component =  @conversion_options.present? ? '/convert' : ''
+          component + '?' + all_options.map { |k,v| "#{k}=#{v}" }.join('&')
         end
+
+        def all_options
+          @retrieval_options.merge(@conversion_options)
+        end
+
       end
 
     end
