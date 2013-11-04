@@ -1,8 +1,12 @@
+require 'coveralls'
+Coveralls.wear!
+
 $LOAD_PATH << File.join(File.dirname(__FILE__), '..', 'lib')
 
 require 'rails/all'
 require 'rspec/rails'
 require 'has_filepicker_image'
+
 
 ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
 

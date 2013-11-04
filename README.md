@@ -1,4 +1,4 @@
-# HasFilepickerImage [![Build Status](https://travis-ci.org/polmiro/has_filepicker_image.png)](https://travis-ci.org/polmiro/has_filepicker_image) [![Code Climate](https://codeclimate.com/github/polmiro/has_filepicker_image.png)](https://codeclimate.com/github/polmiro/has_filepicker_image)
+# HasFilepickerImage [![Build Status](https://travis-ci.org/polmiro/has_filepicker_image.png)](https://travis-ci.org/polmiro/has_filepicker_image) [![Code Climate](https://codeclimate.com/github/polmiro/has_filepicker_image.png)](https://codeclimate.com/github/polmiro/has_filepicker_image) [![Coverage Status](https://coveralls.io/repos/polmiro/has_filepicker_image/badge.png)](https://coveralls.io/r/polmiro/has_filepicker_image)
 
 This gem is mainly an extension of [filepicker-rails](https://github.com/Filepicker/filepicker-rails). It integrates url methods into the models and the form builders.
 This gem helps you get running with [filepicker.io](http://filepicker.io) in Rails with your ActiveRecord models.
