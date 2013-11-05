@@ -17,77 +17,116 @@ describe HasFilepickerImage::FormBuilderHelper do
     end
 
     let(:model)   { TestModel.new }
-    let(:builder) { FormBuilder.new(:test_model, model, ActionView::Base.new, {}, proc {}) }
-
-    it "should add a filepicker_image_field method" do
-      builder.should respond_to(:filepicker_image_field)
+    let(:builder) do
+      args = [:test_model, model, ActionView::Base.new, {}]
+      args << proc {} if Rails::VERSION::MAJOR < 4
+      FormBuilder.new(*args)
     end
 
-    it "returns the filepicker input field" do
-      builder.filepicker_image_field(:image_url).should ==
-      "<div class=\"filepicker-button\">" +
-        "<a data-action=\"pickImage\" href=\"#\" style=\"\">Pick</a>" +
-        "<a href=\"#\" data-action=\"removeImage\" style=\"display:none;\">Remove</a>" +
-      "</div>" +
-      "<div class=\"filepicker-image\" style=\"display:none;\"></div>" +
-      "<input id=\"test_model_image_url\" name=\"test_model[image_url]\" type=\"hidden\" />"
+    let(:rendered) { builder.filepicker_image_field(:image_url) }
+
+    it "displays the buttons" do
+      rendered.should have_tag 'div', :with => { :class => 'filepicker-button' } do
+        with_tag "a", :text => "Pick"
+        with_tag "a", :text => "Remove"
+      end
     end
 
-    it "returns the filepicker input with preview" do
-      model.image_url = 'http://filepicker.io/images/1'
-      builder.filepicker_image_field(:image_url).should ==
-      "<div class=\"filepicker-button\">" +
-        "<a data-action=\"pickImage\" href=\"#\" style=\"display:none;\">Pick</a>" +
-        "<a href=\"#\" data-action=\"removeImage\" style=\"\">Remove</a>" +
-      "</div>" +
-      "<div class=\"filepicker-image\" style=\"\"><img alt=\"image_url thumbnail\" src=\"http://filepicker.io/images/1/convert?w=260&amp;h=180\" /></div>" +
-      "<input id=\"test_model_image_url\" name=\"test_model[image_url]\" type=\"hidden\" value=\"http://filepicker.io/images/1\" />"
+    it "displays the image div" do
+      rendered.should have_tag "div", :with => { :class => 'filepicker-image' }
     end
 
-    it "returns the filepicker input with defaults options" do
-      @configuration.defaults = @configuration.defaults.deep_merge(
-        :html_options => { :'data-fp-debug' => true }
-      )
-
-      builder.filepicker_image_field(:image_url).should ==
-      "<div class=\"filepicker-button\">" +
-        "<a data-action=\"pickImage\" data-fp-debug=\"true\" href=\"#\" style=\"\">Pick</a>" +
-        "<a href=\"#\" data-action=\"removeImage\" style=\"display:none;\">Remove</a>" +
-      "</div>" +
-      "<div class=\"filepicker-image\" style=\"display:none;\"></div>" +
-      "<input id=\"test_model_image_url\" name=\"test_model[image_url]\" type=\"hidden\" />"
+    it "displays the hidden input" do
+      rendered.should have_tag "input", :with => {
+        :id => "test_model_image_url",
+        :name => "test_model[image_url]",
+        :type => "hidden"
+      }
     end
 
-    it "returns the filepicker input with custom options" do
+    it "displays customized buttons text" do
       @configuration.defaults = {
         :pick_button_html => 'Add Photo',
         :delete_button_html => 'Remove Photo'
       }
 
-      builder.filepicker_image_field(:image_url).should ==
-      "<div class=\"filepicker-button\">" +
-        "<a data-action=\"pickImage\" href=\"#\" style=\"\">Add Photo</a>" +
-        "<a href=\"#\" data-action=\"removeImage\" style=\"display:none;\">Remove Photo</a>" +
-      "</div>" +
-      "<div class=\"filepicker-image\" style=\"display:none;\"></div>" +
-      "<input id=\"test_model_image_url\" name=\"test_model[image_url]\" type=\"hidden\" />"
+      rendered.should have_tag 'div' do
+        with_tag "a", :text => "Add Photo"
+        with_tag "a", :text => "Remove Photo"
+      end
     end
 
+    it "displays the filepicker input with custom defaults options" do
+      @configuration.defaults = @configuration.defaults.deep_merge(
+        :html_options => { :'data-fp-debug' => true }
+      )
 
-    it "returns input with a different config" do
+      rendered.should have_tag 'div' do
+        with_tag "a", :with => { :'data-fp-debug' => "true" }
+      end
+    end
+
+    it "displays options from a custom config" do
       @configuration.add_config(
         :picture_config,
         :pick_button_html => 'Add Picture',
         :delete_button_html => 'Remove Picture'
       )
+      rendered = builder.filepicker_image_field(:image_url, :picture_config)
+      rendered.should have_tag 'div' do
+        with_tag "a", :text => "Add Picture"
+        with_tag "a", :text => "Remove Picture"
+      end
+    end
 
-      builder.filepicker_image_field(:image_url, :picture_config).should ==
-      "<div class=\"filepicker-button\">" +
-        "<a data-action=\"pickImage\" href=\"#\" style=\"\">Add Picture</a>" +
-        "<a href=\"#\" data-action=\"removeImage\" style=\"display:none;\">Remove Picture</a>" +
-      "</div>" +
-      "<div class=\"filepicker-image\" style=\"display:none;\"></div>" +
-      "<input id=\"test_model_image_url\" name=\"test_model[image_url]\" type=\"hidden\" />"
+    context "when empty value" do
+      it "displays buttons showing the pick one" do
+        rendered.should have_tag 'div', :with => { :class => 'filepicker-button' } do
+          with_tag "a", :text => "Pick", :with => { :'data-action' => "pickImage", :style => "" }
+          with_tag "a", :text => "Remove", :with => { :'data-action' => "removeImage", :style => "display:none;" }
+        end
+      end
+
+      it "does NOT display image previews" do
+        rendered.should have_tag "div", :with => { :class => 'filepicker-image', :style => 'display:none;' } do
+          without_tag "img"
+        end
+      end
+
+      it "displays the hidden input" do
+        rendered.should have_tag "input", :with => {
+          :id => "test_model_image_url",
+          :name => "test_model[image_url]",
+          :type => "hidden"
+        }
+      end
+    end
+
+
+    context "when value present" do
+      before { model.image_url = 'http://filepicker.io/images/1' }
+
+      it "displays the buttons showing the remove one" do
+        rendered.should have_tag 'div', :with => { :class => 'filepicker-button' } do
+          with_tag "a", :text => "Pick", :with => { :style => "display:none;" }
+          with_tag "a", :text => "Remove", :with => { :style => "" }
+        end
+      end
+
+      it "displays the image" do
+        rendered.should have_tag "div", :with => { :class => 'filepicker-image', :style => '' } do
+          with_tag "img", :alt => "image_url thumbnail", :src => "http://filepicker.io/images/1/convert?w=260&amp;h=180"
+        end
+      end
+
+      it "displays the hidden input with a value" do
+        rendered.should have_tag "input", :with => {
+          :id => "test_model_image_url",
+          :name => "test_model[image_url]",
+          :type => "hidden",
+          :value => "http://filepicker.io/images/1"
+        }
+      end
     end
 
   end

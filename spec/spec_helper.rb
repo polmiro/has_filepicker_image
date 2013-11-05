@@ -5,6 +5,7 @@ $LOAD_PATH << File.join(File.dirname(__FILE__), '..', 'lib')
 
 require 'rails/all'
 require 'rspec/rails'
+require 'rspec-html-matchers'
 require 'has_filepicker_image'
 
 
