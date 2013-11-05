@@ -58,12 +58,13 @@ module HasFilepickerImage
         :class => 'filepicker-button'
       )
 
-      buttons + preview + ActionView::Helpers::InstanceTag.new(
+      hidden_field = ActionView::Helpers::Tags::HiddenField.new(
         @object_name,
         attribute_name,
-        @template,
-        object
-      ).to_input_field_tag('hidden')
+        @template
+      ).render
+
+      buttons + preview + hidden_field
     end
   end
 end
