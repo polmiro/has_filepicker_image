@@ -18,11 +18,10 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
+  s.add_dependency "rails", "~> #{ENV["RAILS_VERSION"] || "3.2"}"
+  s.add_dependency "railties"
+
   s.add_development_dependency "rspec-rails"
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "coveralls"
-
-  s.add_dependency "railties", ">= 3.1.0", "< 5.0"
-  s.add_dependency "rails", '>=3.2.0'
-
 end
