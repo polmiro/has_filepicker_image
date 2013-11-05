@@ -58,13 +58,24 @@ module HasFilepickerImage
         :class => 'filepicker-button'
       )
 
-      hidden_field = ActionView::Helpers::Tags::HiddenField.new(
-        @object_name,
-        attribute_name,
-        @template
-      ).render
+      hidden_field =  if Rails::VERSION::MAJOR >= 4
+                        ActionView::Helpers::Tags::HiddenField.new(
+                          @object_name,
+                          attribute_name,
+                          @template,
+                          :object => object
+                        ).render
+                      else
+                        ActionView::Helpers::InstanceTag.new(
+                          @object_name,
+                          attribute_name,
+                          @template,
+                          object
+                        ).to_input_field_tag('hidden')
+                      end
 
       buttons + preview + hidden_field
     end
+
   end
 end
