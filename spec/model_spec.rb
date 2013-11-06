@@ -22,13 +22,13 @@ describe TestModel do
       it "returns the url replacing the host for the CDN" do
         cdn = 'cdn.net'
         ::Rails.application.stub_chain(:config, :has_filepicker_image, :asset_host).and_return(cdn)
-        model.image.should == 'http://cdn.net/image?cache=true&dl=false'
+        model.image.should == 'http://cdn.net/image?dl=false&cache=true'
       end
     end
 
     context "when called without arguments" do
       it "returns the original url with cache=true and dl=false by default" do
-        model.image.should == 'http://filepicker.io/image?cache=true&dl=false'
+        model.image.should == 'http://filepicker.io/image?dl=false&cache=true'
       end
     end
 
