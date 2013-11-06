@@ -24,7 +24,7 @@ module HasFilepickerImage
 
     def query_component
       component =  @options.with_conversion_options? ? '/convert' : ''
-      component + '?' + @options.map { |k,v| "#{k}=#{v}" }.join('&')
+      component + '?' + @options.sort.map { |k,v| "#{k}=#{v}" }.join('&')
     end
 
     class ApiOptions < HashWithIndifferentAccess
@@ -45,16 +45,16 @@ module HasFilepickerImage
         end
 
         merge! options
-        reverse_merge! defaults(options)
+        merge! defaults.except *options.keys.map(&:to_sym)
       end
 
       def with_conversion_options?
-        (keys & CONVERSION_OPTIONS).present?
+        (keys.map(&:to_sym) & CONVERSION_OPTIONS).present?
       end
 
       private
 
-      def defaults(options)
+      def defaults
         if with_conversion_options?
           DEFAULT_OPTIONS
         else
