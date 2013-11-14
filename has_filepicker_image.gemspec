@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
   s.homepage    = ""
   s.summary     = "Easily add filepicker images to your models"
   s.description = "Easily add filepicker images to your models"
+  s.license     = 'MIT'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
