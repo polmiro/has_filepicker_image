@@ -6,9 +6,8 @@
 [![Gem Version](https://badge.fury.io/rb/has_filepicker_image.png)](http://badge.fury.io/rb/has_filepicker_image)
 
 This gem is mainly an extension of [filepicker-rails](https://github.com/Filepicker/filepicker-rails). It integrates url methods into the models and the form builders.
-This gem helps you get running with [filepicker.io](http://filepicker.io) in Rails with your ActiveRecord models.
-It provides methods for your models to easily retrieve sizes and styles of your images.
-It also adds form helpers to nicely display and reload your images in you forms
+This gem helps you get running with [filepicker.io](http://filepicker.io) in Rails with your ActiveRecord models. You will be able to easily define sizes and styles of your images.
+It also adds form helpers to seamelessly pick and preview the images in you forms.
 
 ## Installation
 
@@ -141,7 +140,7 @@ With Rails form builders
 <%= form_for @user do |f| %>
   <%= f.label :filepicker_url, "Upload Your Avatar:" %>
   <%= f.filepicker_image_field :filepicker_url, :delete_button_html => 'Esborrar' %>
-  <%= f.filepicker_field :filepicker_url, 'doc', :delete_button_html => 'Esborrar' %>
+  <%= f.filepicker_image_field :filepicker_url, 'doc', :delete_button_html => 'Esborrar' %>
   <%= f.submit %>
 <% end %>
 ```
