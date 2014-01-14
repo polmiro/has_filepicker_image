@@ -9,7 +9,17 @@ module HasFilepickerImage
   require "has_filepicker_image/base"
   require "has_filepicker_image/helpers/view_helper"
   require "has_filepicker_image/helpers/form_builder_helper"
-  require 'has_filepicker_image/helpers/simple_form_input' if defined? SimpleForm
-  require 'has_filepicker_image/helpers/formtastic_form_input' if defined? Formtastic
   require "has_filepicker_image/engine"
+
+  begin
+    require 'simple_form'
+    require 'has_filepicker_image/helpers/simple_form_input'
+  rescue LoadError
+  end
+
+  begin
+    require 'formtastic'
+    require 'has_filepicker_image/helpers/formtastic_form_input'
+  rescue LoadError
+  end
 end
